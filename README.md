@@ -1,28 +1,45 @@
-# ai-stack 🚀
+# ai-stack
 
-Welcome to **ai-stack**, your personal AI tech stack.
+A personal AI stack running LiteLLM proxy, Open WebUI, and Apache Tika as containerized services.
 
-## Features 🌟
+## Quick Start
 
-- **AI-Powered Proxies**: Leverage the power of AI with our `litellm-proxy` service, integrating with OpenAI and Anthropic APIs.
-- **User-Friendly Web Interface**: Access your tools through a sleek web UI powered by `open-webui`.
-
-## Open WebUI Tools 🛠️
-- **Google Calendar Integration**: Fetch upcoming events effortlessly with our `GoogleCalendarClient`.
-
-## Quick Start 🚀
-
-1. **Setup Environment**: Copy `.env.example` to `.env` and fill in your API keys.
-2. **Launch Services**: Run the following command to start the stack:
+1. **Create external resources** (one-time):
    ```bash
-   uv run dotenv run -- docker-compose up -d
+   podman network create ai-stack_default
+   podman volume create open-webui
    ```
 
-## Requirements 📋
+2. **Set up environment**: Copy `.env.example` to `.env` and fill in your API keys.
 
-- **Python 3.11+**
-- **Docker**
+3. **Launch services**:
+   ```bash
+   make up
+   ```
 
-## Contributing 🤝
+## Services
 
-We welcome contributions! Please feel free to submit pull requests or open issues.
+| Service | Port | Description |
+|---------|------|-------------|
+| `litellm-proxy` | 4000 | Unified LLM gateway (OpenAI, Anthropic, Google) |
+| `open-webui` | 3000 | Chat UI |
+| `tika` | 9998 | Document processing |
+
+## Make Targets
+
+```
+make up        # start all services
+make down      # stop all services
+make restart   # stop then start
+make rebuild   # pull latest images and force-recreate
+make logs      # tail logs (SVC=<name> for one service)
+make ps        # show running containers
+make clean     # stop and remove containers + orphans
+```
+
+## Requirements
+
+- Python 3.11+
+- Podman
+- docker-compose
+- uv
